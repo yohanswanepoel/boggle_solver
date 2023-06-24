@@ -1,4 +1,5 @@
-import duckdb
+import sqlite3
+
 LOOP = 1
 RECURSIVE = 2
 
@@ -12,12 +13,19 @@ TEST_BOARD = [
 words_found = []
 non_words = []
 score = 0
+lite_con = None
+lite_cur = None
 
 def load_word_list():
-    duckdb.read_csv('wordlist.csv',header=False) 
+    global lite_con
+    global lite_cur
+    print("Connecting to SQL")
+    lite_con = sqlite3.connect("Words.db")
+    lite_cur = lite_con.cursor()
 
 def list_words(word):
-    return duckdb.sql("SELECT column0 FROM \"wordlist.csv\" WHERE column0 like '{value}%'".format(value=word)).fetchall()
+    global lite_cur
+    return lite_cur.execute("SELECT word FROM words WHERE word like '{value}%' order by word".format(value=word)).fetchall()
 
 # Useful method for debugging
 def solve_one(board, row, col):
@@ -99,6 +107,7 @@ def continue_score(word):
     if word in non_words:
         return False
     found = list_words(word)
+    #print(found)
     if len(found) > 0:
         if found[0][0] == word and word not in words_found:
             print(word)
@@ -128,7 +137,3 @@ def word_logic(value, word_len):
     if len(value) > 2:
         return continue_score(value)
     return True
-
-def clean_dict():
-    load_word_list()
-    duckdb.sql("COPY(SELECT column0 FROM \"wordlist.csv\" where (LEN(column0) >2 and LEN(column0) < 17)) TO 'output.csv'")
