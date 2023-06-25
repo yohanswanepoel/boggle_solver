@@ -23,9 +23,18 @@ def load_word_list():
     lite_con = sqlite3.connect("Words.db")
     lite_cur = lite_con.cursor()
 
+
 def list_words(word):
     global lite_cur
-    return lite_cur.execute("SELECT word FROM words WHERE word like '{value}%' order by word".format(value=word)).fetchall()
+    if len(word) == 3:
+        return lite_cur.execute("select word from word_indexed where word3 = '{value}' order by word".format(value=word)).fetchall()
+    if len(word) == 4:
+        return lite_cur.execute("select word from word_indexed where word4 = '{value}' order by word".format(value=word)).fetchall()
+    if len(word) == 5:
+        return lite_cur.execute("select word from word_indexed where word5 = '{value}' order by word".format(value=word)).fetchall()
+    if len(word) == 6:
+        return lite_cur.execute("select word from word_indexed where word6 = '{value}' order by word".format(value=word)).fetchall()
+    return lite_cur.execute("SELECT word FROM word_indexed WHERE word like '{value}%' order by word".format(value=word)).fetchall()
 
 # Useful method for debugging
 def solve_one(board, row, col):
