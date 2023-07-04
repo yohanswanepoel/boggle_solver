@@ -1,4 +1,4 @@
-from boggle_solver import solve_board, TEST_BOARD, LOOP, RECURSIVE, load_word_list, solve_one
+from boggle_solver import solve_board, TEST_BOARD, LOOP, RECURSIVE, load_word_list, solve_one, randomise_board
 import time
 import sys
 
@@ -62,6 +62,7 @@ if __name__ == "__main__":
         main()
 
     if "-t" in str(sys.argv):
+        randomise_board()
         test()
     print("Usage....................................")
     print("To specify your own board; python main.py")

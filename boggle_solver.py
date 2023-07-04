@@ -1,4 +1,5 @@
 import sqlite3
+from random import sample
 
 LOOP = 1
 RECURSIVE = 2
@@ -10,11 +11,44 @@ TEST_BOARD = [
     ['h', 'l', 'c', 'e']
 ]
 
+
+BOGGLE_DICE = [
+    ['a','a','e','e','g','n'],
+    ['a','b','b','j','o','o'],
+    ['a','c','h','o','p','s'],
+    ['a','f','f','k','p','s'],
+    ['a','o','o','t','t','w'],
+    ['c','i','m','o','t','u'],
+    ['d','e','i','l','r','x'],
+    ['d','e','l','r','v','y'],
+    ['d','i','s','t','t','y'],
+    ['e','e','g','h','n','w'],
+    ['e','e','i','n','s','u'],
+    ['e','h','r','t','v','w'],
+    ['e','i','o','s','s','t'],
+    ['e','l','r','t','t','y'],
+    ['h','i','m','n','u','qu'],
+    ['h','l','n','n','r','z'],
+]
+
+
 words_found = []
 non_words = []
 score = 0
 lite_con = None
 lite_cur = None
+
+def randomise_board():
+    global BOGGLE_DICE
+    global TEST_BOARD
+    new_board = TEST_BOARD
+    row, col = 0, 0
+    for dice in BOGGLE_DICE:
+        new_board[row // 4][col % 4]=sample(dice,1)[0]
+        row +=1 
+        col +=1 
+    print(new_board)
+
 
 def load_word_list():
     global lite_con
